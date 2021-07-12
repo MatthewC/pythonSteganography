@@ -5,7 +5,7 @@
 Using python, implement a method to hide data within images. Should allow for you to select an image via the filedialog method.
 
 ## Steps to work on:
-- [ ] Deal with importing image from file directory.
+- [x] Deal with importing image from file directory.
 - [ ] (Optional) Allow for 'encrypting' data with passkey.
 - [ ] Implement steganography algorithm
 - [ ] Output image to a GUI, and/or export the image to the same directory.
