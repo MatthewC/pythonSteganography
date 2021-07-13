@@ -112,9 +112,17 @@ class imageSteg:
                 dataExtract += r[:-1]
                 dataExtract += g[:-1]
                 dataExtract += b[:-1]
-        print(dataExtract)
-
-
+        
+        #With all the binary values in a single variable, we can loop through them an convert them into bytes.
+        byteExtract = []
+        currentByte = ""
+        for bit in dataExtract:
+            if len(currentByte) <= 7:
+                currentByte += bit
+            else:
+                byteExtract.append(currentByte)
+                currentByte = bit
+        print(byteExtract)
 
 userChoice = ""
 
@@ -122,8 +130,9 @@ while not userChoice == ".exit":
     #Ask user whether he wants to encode a message, or a decode a message. 
     userChoice = input('Type 1 to encode an image | Type 2 to decode an image | Type .exit to leave: ')
 
-    while not (userChoice == "1" or userChoice == "2" or userChoice == ".exit"):
-        userChoice = input('Not a valid choice, try again: ')
+    #Make sure program actually exits.
+    if not (userChoice == "1" or userChoice == "2"):
+        continue
 
     #Handle opening an image, and passing it to PIL
     root = tk.Tk()
@@ -171,5 +180,7 @@ while not userChoice == ".exit":
                 pass
             else:
                 print("[ERR] Message is too long, or empty")
+        elif userChoice == "2":
+            image.extractData()
     except IOError:
         print("[ERR] Not a valid image.")
