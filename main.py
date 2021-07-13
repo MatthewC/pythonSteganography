@@ -8,7 +8,7 @@ class imageSteg:
     #Define variables that should be shared between each method.
     def __init__(self, image, height, width):
         self.image = image
-        self.image = height
+        self.height = height
         self.width = width
         self.binary = ""
 
@@ -27,7 +27,26 @@ class imageSteg:
         pass
 
     def implantData(self, message):
-        pass
+        #Load image
+        img = self.image.load()
+
+        #Convert message to binary
+        self.binary = self.toBinary(message)
+
+        for pixels in range(self.height):
+            for pixel in range(self.width):
+                """
+                PIL allows for image manipulation. By using the height and width in the two for loops, 
+                we can access each pixel individual. PIL stores each pixel as a tuple, with three values,
+                one for each of the RGB colors.
+
+                pixel[0] would be red
+                pixel[1] would be green
+                pixel[2] would be blue
+                """
+
+                r, g, b = self.toBinary(img[pixel, pixels])
+                print(r, g, b)
 
     def extractData(self, message):
         pass
@@ -37,9 +56,10 @@ userChoice = ""
 while not userChoice == ".exit":
     #Ask user whether he wants to encode a message, or a decode a message. 
     userChoice = input('Type 1 to encode an image | Type 2 to decode an image | Type .exit to leave: ')
+    print(userChoice)
 
     while not (userChoice == "1" or userChoice == "2"):
-        print('Not a valid choice, try again: ')
+        userChoice = input('Not a valid choice, try again: ')
 
     #Handle opening an image, and passing it to PIL
     root = tk.Tk()
@@ -82,7 +102,7 @@ while not userChoice == ".exit":
             #TODO: Implement encryption (if possible)
 
             if len(userInput) > 0 and len(userInput) < maxBytes:
-                
+                image.implantData(userInput)
                 pass
             else:
                 print("[ERR] Message is too long, or empty")
