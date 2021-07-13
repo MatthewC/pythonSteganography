@@ -42,6 +42,10 @@ class imageSteg:
         #Convert message to binary
         self.binary = self.toBinary(message)
 
+        #We need to two variables to store the progress of how much of the message we've gone through
+        currentPos = 0
+        endPos = len(self.binary)
+
         for pixels in range(self.height):
             for pixel in range(self.width):
                 """
@@ -55,7 +59,28 @@ class imageSteg:
                 """
 
                 r, g, b = self.toBinary(img[pixel, pixels], True)
-                print(r, g, b)
+
+                #Modify RED binary.
+                if endPos > currentPos:
+                    #In the code below, we get the last bit of the byte, and add the first bit of our data. 
+                    #The '2' is used to denote the fact we want it in Base-2 (Binary)
+                    img[pixel, pixels] = int(r[:-1] + self.binary[currentPos], 2)
+                    currentPos += 1
+                
+                #Modify GREEN binary.
+                if endPos > currentPos:
+                    img[pixel, pixels] = int(g[:-1] + self.binary[currentPos], 2)
+                    currentPos += 1
+
+                #Modify BLUE binary.
+                if endPos > currentPos:
+                    img[pixel, pixels] = int(b[:-1] + self.binary[currentPos], 2)
+                    currentPos += 1
+
+                #Base case (We finished going through our message)
+                if endPos < currentPos:
+                    break
+        return img
 
     def extractData(self, message):
         pass
