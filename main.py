@@ -36,6 +36,7 @@ class imageSteg:
         pass
 
     def implantData(self, message):
+        print("[LOG] Reading image...")
         #Load image
         img = self.image.load()
 
@@ -50,6 +51,7 @@ class imageSteg:
         currentPos = 0
         endPos = len(self.binary)
 
+        print("[LOG] Looping through pixels...")
         for pixels in range(self.height):
             for pixel in range(self.width):
                 """
@@ -96,6 +98,7 @@ class imageSteg:
                 #Base case (We finished going through our message)
                 if endPos < currentPos:
                     break
+        print("[LOG] Message implanted successfully.")
         return img
 
     def extractData(self):
@@ -176,7 +179,12 @@ while not userChoice == ".exit":
 
             if len(userInput) > 0 and len(userInput) < maxBytes:
                 image.implantData(userInput)
+
+                print("[LOG] Saving image...")
+
                 img.save('encoded.png')
+
+                print("[LOG] Image saved.")
                 pass
             else:
                 print("[ERR] Message is too long, or empty")
