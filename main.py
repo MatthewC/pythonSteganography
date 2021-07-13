@@ -39,6 +39,10 @@ class imageSteg:
         #Load image
         img = self.image.load()
 
+        #To know when we reach the end of the message, we need a placeholder at the end.
+        seperator = "|||"
+        message += seperator
+
         #Convert message to binary
         self.binary = self.toBinary(message)
 
@@ -94,8 +98,23 @@ class imageSteg:
                     break
         return img
 
-    def extractData(self, message):
-        pass
+    def extractData(self):
+        img = self.image.load()
+
+        #Variable we'll use to store the last bits. 
+        dataExtract = ""
+
+        #Do the same loop we did to hide the data, as we need to get every 'least-significant bit' from the image.
+        for pixels in range(self.height):
+            for pixel in range(self.width):
+                r, g, b = self.toBinary(img[pixel, pixels], True)
+
+                dataExtract += r[:-1]
+                dataExtract += g[:-1]
+                dataExtract += b[:-1]
+        print(dataExtract)
+
+
 
 userChoice = ""
 
