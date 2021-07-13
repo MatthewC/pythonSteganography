@@ -103,7 +103,7 @@ while not userChoice == ".exit":
     #Ask user whether he wants to encode a message, or a decode a message. 
     userChoice = input('Type 1 to encode an image | Type 2 to decode an image | Type .exit to leave: ')
 
-    while not (userChoice == "1" or userChoice == "2"):
+    while not (userChoice == "1" or userChoice == "2" or userChoice == ".exit"):
         userChoice = input('Not a valid choice, try again: ')
 
     #Handle opening an image, and passing it to PIL
@@ -148,6 +148,7 @@ while not userChoice == ".exit":
 
             if len(userInput) > 0 and len(userInput) < maxBytes:
                 image.implantData(userInput)
+                img.save('encoded.png')
                 pass
             else:
                 print("[ERR] Message is too long, or empty")
