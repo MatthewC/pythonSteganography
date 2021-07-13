@@ -58,24 +58,36 @@ class imageSteg:
                 pixel[2] would be blue
                 """
 
+                #Because it is a tuple, we cannot directly edit it. Instead, we create a temporary array.
+                tempArray = []
+
                 r, g, b = self.toBinary(img[pixel, pixels], True)
 
                 #Modify RED binary.
                 if endPos > currentPos:
                     #In the code below, we get the last bit of the byte, and add the first bit of our data. 
                     #The '2' is used to denote the fact we want it in Base-2 (Binary)
-                    img[pixel, pixels] = int(r[:-1] + self.binary[currentPos], 2)
+                    tempArray.append(int(r[:-1] + self.binary[currentPos], 2))
                     currentPos += 1
+                else:
+                    tempArray.append(img[pixel, pixels][0])
                 
                 #Modify GREEN binary.
                 if endPos > currentPos:
-                    img[pixel, pixels] = int(g[:-1] + self.binary[currentPos], 2)
+                    tempArray.append(int(g[:-1] + self.binary[currentPos], 2))
                     currentPos += 1
+                else:
+                    tempArray.append(img[pixel, pixels][1])
 
                 #Modify BLUE binary.
                 if endPos > currentPos:
-                    img[pixel, pixels] = int(b[:-1] + self.binary[currentPos], 2)
+                    tempArray.append(int(b[:-1] + self.binary[currentPos], 2))
                     currentPos += 1
+                else:
+                    tempArray.append(img[pixel, pixels][2])
+
+                #With the array full, we turn it's values into a tuple and replace the RGB pixels in the original image.
+                img[pixel, pixels] = (tempArray[0], tempArray[1], tempArray[2])
 
                 #Base case (We finished going through our message)
                 if endPos < currentPos:
