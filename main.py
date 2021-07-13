@@ -13,12 +13,21 @@ class imageSteg:
         self.binary = ""
 
     #For the text to be inserted into the image, we first need to convert it to binary. 
-    def toBinary(self, message):
-        textArray = bytearray(message, 'utf-8')
-        binArray = []
-        for x in textArray:
-            binArray.append(format(x, 'b'))
-        return ''.join(binArray)
+    def toBinary(self, message, isPixel = False):
+        if isPixel:
+            binArray = []
+            for pix in message:
+                #Use bin to convert number into binary, whilst using [2:] to get rid of the "0b" Python puts in.
+                binary = bin(pix)[2:]
+                #Use zfill to make sure it is 8 integers long.
+                binArray.append(binary.zfill(8))
+            return binArray
+        else:
+            textArray = bytearray(message, 'utf-8')
+            binArray = []
+            for x in textArray:
+                binArray.append(format(x, 'b'))
+            return ''.join(binArray)
 
     def encryptData(self, message, password):
         pass
@@ -45,7 +54,7 @@ class imageSteg:
                 pixel[2] would be blue
                 """
 
-                r, g, b = self.toBinary(img[pixel, pixels])
+                r, g, b = self.toBinary(img[pixel, pixels], True)
                 print(r, g, b)
 
     def extractData(self, message):
@@ -56,7 +65,6 @@ userChoice = ""
 while not userChoice == ".exit":
     #Ask user whether he wants to encode a message, or a decode a message. 
     userChoice = input('Type 1 to encode an image | Type 2 to decode an image | Type .exit to leave: ')
-    print(userChoice)
 
     while not (userChoice == "1" or userChoice == "2"):
         userChoice = input('Not a valid choice, try again: ')
@@ -95,7 +103,7 @@ while not userChoice == ".exit":
             maxBytes = height * width * 3 / 8
             maxBytes = round(maxBytes)
 
-            print(f'Total bytes available: {maxBytes}')
+            print(f'[MSG] Total bytes available: {maxBytes}')
 
             userInput = input("Enter text to be hidden: ")
 
