@@ -8,7 +8,7 @@ Using python, implement a method to hide data within images. Should allow for yo
 - [x] Deal with importing image from file directory.
 - [ ] (Optional) Allow for 'encrypting' data with passkey.
 - [x] Implement steganography algorithm
-- [ ] Implement decoding algorithm
+- [x] Implement decoding algorithm
 - [x] Output image to a GUI, and/or export the image to the same directory.
 
 ## Notes on steganography
