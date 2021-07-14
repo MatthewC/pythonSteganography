@@ -11,6 +11,7 @@ class imageSteg:
         self.height = height
         self.width = width
         self.binary = ""
+        self.seperator = "|||"
 
     #For the text to be inserted into the image, we first need to convert it to binary. 
     def toBinary(self, message, isPixel = False):
@@ -26,8 +27,14 @@ class imageSteg:
             textArray = bytearray(message, 'utf-8')
             binArray = []
             for x in textArray:
-                binArray.append(format(x, 'b'))
+                binArray.append(format(x, 'b').zfill(8))
             return ''.join(binArray)
+
+    def toText(self, binary):
+        #Convert binary into a base-2 integer
+        binary = int(binary, 2)
+        return chr(binary)
+
 
     def encryptData(self, message, password):
         pass
@@ -41,12 +48,11 @@ class imageSteg:
         img = self.image.load()
 
         #To know when we reach the end of the message, we need a placeholder at the end.
-        seperator = "|||"
-        message += seperator
+        message += self.seperator
 
         #Convert message to binary
         self.binary = self.toBinary(message)
-
+        print(self.binary)
         #We need to two variables to store the progress of how much of the message we've gone through
         currentPos = 0
         endPos = len(self.binary)
@@ -71,7 +77,7 @@ class imageSteg:
 
                 #Modify RED binary.
                 if endPos > currentPos:
-                    #In the code below, we get the last bit of the byte, and add the first bit of our data. 
+                    #In the code below, we replace the last bit of the byte, and add the first bit of our data. 
                     #The '2' is used to denote the fact we want it in Base-2 (Binary)
                     tempArray.append(int(r[:-1] + self.binary[currentPos], 2))
                     currentPos += 1
@@ -103,6 +109,7 @@ class imageSteg:
 
     def extractData(self):
         img = self.image.load()
+        message = ""
 
         #Variable we'll use to store the last bits. 
         dataExtract = ""
@@ -112,22 +119,35 @@ class imageSteg:
             for pixel in range(self.width):
                 r, g, b = self.toBinary(img[pixel, pixels], True)
 
-                dataExtract += r[:-1]
-                dataExtract += g[:-1]
-                dataExtract += b[:-1]
-        
+                dataExtract += r[-1:]
+                dataExtract += g[-1:]
+                dataExtract += b[-1:]
+
         #With all the binary values in a single variable, we can loop through them an convert them into bytes.
         byteExtract = []
         currentByte = ""
+
         for bit in dataExtract:
             if len(currentByte) <= 7:
                 currentByte += bit
             else:
                 byteExtract.append(currentByte)
                 currentByte = bit
-        print(byteExtract)
+
+        counter = 0
+        for byte in byteExtract:
+            if counter < 20:
+                counter += 1
+            message += self.toText(byte)
+
+            if message[-3:] == self.seperator:
+                print("[LOG] End of message reached.")
+                break
+        print(message)
 
 userChoice = ""
+
+
 
 while not userChoice == ".exit":
     #Ask user whether he wants to encode a message, or a decode a message. 
@@ -185,7 +205,6 @@ while not userChoice == ".exit":
                 img.save('encoded.png')
 
                 print("[LOG] Image saved.")
-                pass
             else:
                 print("[ERR] Message is too long, or empty")
         elif userChoice == "2":
