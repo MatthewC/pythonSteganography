@@ -27,6 +27,7 @@ class imageSteg:
             textArray = bytearray(message, 'utf-8')
             binArray = []
             for x in textArray:
+                #Make sure byte is 8-bits lone :)
                 binArray.append(format(x, 'b').zfill(8))
             return ''.join(binArray)
 
@@ -52,7 +53,7 @@ class imageSteg:
 
         #Convert message to binary
         self.binary = self.toBinary(message)
-        print(self.binary)
+
         #We need to two variables to store the progress of how much of the message we've gone through
         currentPos = 0
         endPos = len(self.binary)
@@ -134,16 +135,17 @@ class imageSteg:
                 byteExtract.append(currentByte)
                 currentByte = bit
 
-        counter = 0
+        #Now with each byte, we covert it back to ASCII and append it to our message variable.
         for byte in byteExtract:
-            if counter < 20:
-                counter += 1
             message += self.toText(byte)
 
+            #Check if we've reached the end of the message.
             if message[-3:] == self.seperator:
                 print("[LOG] End of message reached.")
                 break
-        print(message)
+        
+        #Return message whilst removing the seperator placeholder from the end. 
+        return message[:-(len(self.seperator))]
 
 userChoice = ""
 
@@ -204,10 +206,12 @@ while not userChoice == ".exit":
 
                 img.save('encoded.png')
 
-                print("[LOG] Image saved.")
+                print("[DONE] Image saved.")
             else:
                 print("[ERR] Message is too long, or empty")
         elif userChoice == "2":
-            image.extractData()
+            messageExtract = image.extractData()
+            
+            print(f'[DONE] Message extracted: {messageExtract}')
     except IOError:
         print("[ERR] Not a valid image.")
