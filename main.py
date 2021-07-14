@@ -175,7 +175,7 @@ while not userChoice == ".exit":
 
     print(f'[LOG] Opening file: {file_path}')
 
-    #Use try/except to catch any file inputs which aren't an image.
+    #Use try/except to catch any file inputs which aren't an image, or if no file was selected at all.
     try:
         img = Image.open(file_path)
         print("[LOG] Image opened.")
@@ -215,3 +215,5 @@ while not userChoice == ".exit":
             print(f'[DONE] Message extracted: {messageExtract}')
     except IOError:
         print("[ERR] Not a valid image.")
+    except AttributeError:
+        print('[ERR] No file selected.')
