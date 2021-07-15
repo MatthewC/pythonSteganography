@@ -3,7 +3,7 @@ from tkinter import filedialog
 from PIL import Image
 
 #Define class I'll use to store methods related to the steganography
-#TODO: Flesh out each of the methods.
+#TODO: Flesh out encryption methods.
 class imageSteg:
     #Define variables that should be shared between each method.
     def __init__(self, image, height, width):
