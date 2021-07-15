@@ -10,6 +10,7 @@ Using python, implement a method to hide data within images. Should allow for yo
 - [x] Implement steganography algorithm
 - [x] Implement decoding algorithm
 - [x] Output image to a GUI, and/or export the image to the same directory.
+- [ ] Fix issue with PIL being picky about what images we input (getting IndexError).
 
 ## Notes on steganography
 There are different ways to implement steganography, but the most common one seems to be LSB (Least Significant Bit).

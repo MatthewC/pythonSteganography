@@ -27,7 +27,7 @@ class imageSteg:
             textArray = bytearray(message, 'utf-8')
             binArray = []
             for x in textArray:
-                #Make sure byte is 8-bits lone :)
+                #Make sure byte is 8-bits long :)
                 binArray.append(format(x, 'b').zfill(8))
             return ''.join(binArray)
 
@@ -37,10 +37,10 @@ class imageSteg:
         return chr(binary)
 
 
-    def encryptData(self, message, password):
+    def encryptData(self, message, key):
         pass
 
-    def decryptData(self, message, password):
+    def decryptData(self, message, key):
         pass
 
     def implantData(self, message):
